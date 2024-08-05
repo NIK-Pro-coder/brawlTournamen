@@ -76,7 +76,7 @@ def hookThread() :
 
 threading.Thread(target = hookThread).start()
 
-hook("Brawl Tournament bot started")
+hook("Brawl Tournament Webhook started")
 
 def showPlayers() :
 	if len(players) > 0 :
