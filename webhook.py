@@ -5,6 +5,7 @@ import threading
 import dotenv
 import os
 import time
+import random
 
 dotenv.load_dotenv()
 
@@ -69,7 +70,7 @@ def hookThread() :
 
 		form = messageQueue.pop(0)
 
-		print(f"CHAT : {form['content'].strip('`')}")
+		print(f"CHAT : {form['content'].strip('`').replace("\n", "\nCHAT : ")}")
 		requests.post(hookUrl, json = form)
 
 		time.sleep(2)
@@ -384,6 +385,34 @@ def eliminate(remaining) :
 		if srt.index(i.name) > int(remaining) :
 			removePlayer(i.tag)
 
+def makeTeams(num = "3") :
+	amt = int(num)
+
+	new = sorted(points, key=lambda k : points[k])
+
+	teams = []
+	team = []
+
+	for m in new.copy() :
+		i = new.pop(0)
+		new = new[::-1]
+		team.append(i)
+		if len(team) == amt :
+			teams.append(team.copy())
+			team.clear()
+
+	for i in teams :
+		text = f"Team {teams.index(i)+1} :"
+		for l in i :
+			text += f"\n{l}"
+		hook(text)
+
+	if len(team) > 0 :
+		text = "Players not in a team :"
+		for i in team :
+			text += f"\n{i}"
+		hook(text)
+
 cmds = {
 	"show" : showPlayers,
 	"add" : addPlayer,
@@ -402,6 +431,7 @@ cmds = {
 	"reject" : rejectBot,
 	"eliminate" : eliminate,
 	"reset" : reset,
+	"makeTeams" : makeTeams,
 }
 
 def execFunc(string) :

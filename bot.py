@@ -138,6 +138,15 @@ async def reset(inter):
 	await inter.response.send_message("On it!")
 	webhook.reset()
 
+@bot.slash_command()
+async def maketeams(inter, num = "3"):
+	"""Makes teams of num players"""
+	if not(webhook.accept) :
+		await inter.response.send_message("Command rejected")
+		return
+	await inter.response.send_message("On it!")
+	webhook.makeTeams(num)
+
 def getConsole() :
 	while True :
 		ins = input("").strip()
